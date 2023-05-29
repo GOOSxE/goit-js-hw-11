@@ -16,7 +16,7 @@ export default class ImageApiService {
       `${URL}?key=${API_KEY}&q=${this.searchQuery}&image-type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
     );
     this.incrementPageNumber()
-    return data.hits;
+    return data;
   }
   resetPageNumber() {
     this.page = 1;
