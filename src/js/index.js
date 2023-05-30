@@ -30,7 +30,6 @@ async function onFormSubmit(event) {
           'Sorry, there are no images matching your search query. Please try again.',
           2000
         );
-        return;
       } else if (
         imageApiService.page ===
         Math.ceil(data.totalHits / imageApiService.perPage)
@@ -59,11 +58,12 @@ async function LoadMore() {
       imageApiService.page ===
       Math.ceil(data.totalHits / imageApiService.perPage)
     ) {
-      Notify.warning(
-        "We're sorry, but you've reached the end of search results."
-      );
+      renderPhotoCard(data.hits);
       disableLoadMoreBtn();
-      return;
+      Notify.warning(
+        "We're sorry, but you've reached the end of search results.",
+        3000
+      );
     } else {
       imageApiService.incrementPageNumber();
       renderPhotoCard(data.hits);
