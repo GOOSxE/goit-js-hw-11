@@ -31,11 +31,18 @@ async function onFormSubmit(event) {
           2000
         );
         return;
-      } else if (data.totalHits > 40) {
-        enableLoadMoreBtn();
+      } else if (
+        imageApiService.page ===
+        Math.ceil(data.totalHits / imageApiService.perPage)
+      ) {
+        Notify.success(`Hoorey! We found ${data.totalHits} images!`);
+        imageApiService.incrementPageNumber();
         renderPhotoCard(data.hits);
       } else {
+        Notify.success(`Hoorey! We found ${data.totalHits} images!`);
+        imageApiService.incrementPageNumber();
         renderPhotoCard(data.hits);
+        enableLoadMoreBtn();
       }
     } catch (error) {
       Notify.failure('Oops, something got wrong, try to reboot page!', 2000);
@@ -48,13 +55,17 @@ async function onFormSubmit(event) {
 async function LoadMore() {
   try {
     const data = await imageApiService.fetchImages();
-    if (data.hits.length < 40 || imageApiService.page === 13) {
+    if (
+      imageApiService.page ===
+      Math.ceil(data.totalHits / imageApiService.perPage)
+    ) {
       Notify.warning(
         "We're sorry, but you've reached the end of search results."
       );
       disableLoadMoreBtn();
       return;
     } else {
+      imageApiService.incrementPageNumber();
       renderPhotoCard(data.hits);
     }
   } catch (error) {
